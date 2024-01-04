@@ -1,7 +1,7 @@
 from src.bot.templates import EMAIL_DATA_MESSAGE
 from src.config import DATA_PATH, USERS_DATA_FILENAME
 from src.email.email_service import Email
-from src.state_manager import StateManager
+from src.utils.csv_handler import CSVHandler
 
 
 def send_emails_data_message(context, email_data: Email):
@@ -11,9 +11,9 @@ def send_emails_data_message(context, email_data: Email):
         date=email_data.date,
         subject=email_data.subject,
     )
-    state_manager = StateManager(DATA_PATH / USERS_DATA_FILENAME)
-    if state_manager.file_is_exists():
-        chat_ids = state_manager.read_row('Chat_id')
+    csv_handler = CSVHandler(DATA_PATH / USERS_DATA_FILENAME)
+    if csv_handler.file_is_exists():
+        chat_ids = csv_handler.read_row('Chat_id')
         for chat_id in chat_ids:
             context.bot.send_message(
                 chat_id=chat_id, text=message, parse_mode='html'

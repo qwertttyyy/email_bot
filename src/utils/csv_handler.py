@@ -2,7 +2,7 @@ import csv
 import os
 
 
-class StateManager:
+class CSVHandler:
     def __init__(self, path):
         self.path = path
 

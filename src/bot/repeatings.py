@@ -6,19 +6,18 @@ from src.config import (
     DATA_PATH,
     EMAIL_DATE_FORMAT,
     SHEET_NAME,
-    ADMIN_CHAT_ID,
 )
 from src.email.email_service import EmailClient
 from src.google_sheets.sheets import GoogleSheets
-from src.state_manager import StateManager
+from src.utils.csv_handler import CSVHandler
 from src.utils.logging_config import logger
 
 
 def send_emails_data(context):
-    state_manager = StateManager(DATA_PATH / SENT_EMAILS_UID_FILENAME)
+    csv_handler = CSVHandler(DATA_PATH / SENT_EMAILS_UID_FILENAME)
 
-    if not state_manager.file_is_exists():
-        state_manager.create_csv(['UID', 'Дата', 'Адрес'])
+    if not csv_handler.file_is_exists():
+        csv_handler.create_csv(['UID', 'Дата', 'Адрес'])
 
     email_client = EmailClient()
     yesterday_date = (dt.date.today() - dt.timedelta(1)).strftime(
@@ -31,7 +30,7 @@ def send_emails_data(context):
         raise Exception()
 
     google_sheets = GoogleSheets()
-    uids = state_manager.read_row('UID')
+    uids = csv_handler.read_row('UID')
     for email in emails:
         if email.uid not in uids:
             data_to_sheets = [
@@ -54,4 +53,4 @@ def send_emails_data(context):
             except Exception:
                 logger.exception(f'Ошибка отправки в телеграм {email}')
                 raise Exception()
-            state_manager.update_rows([email.uid, email.date, email.address])
+            csv_handler.update_rows([email.uid, email.date, email.address])

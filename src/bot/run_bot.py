@@ -6,7 +6,7 @@ from telegram import Bot
 from telegram.ext import Updater, CommandHandler
 
 from src.bot.commands import start
-from src.bot.repeating import send_emails_data
+from src.bot.repeatings import send_emails_data
 
 load_dotenv()
 
