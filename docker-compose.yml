@@ -1,0 +1,12 @@
+version: '3.3'
+
+volumes:
+  bot_data:
+
+services:
+  bot:
+    build: ./src
+    image: email-bot
+    env_file: .env
+    volumes:
+      - bot_data:/app/src/data

@@ -1,0 +1,11 @@
+version: '3.3'
+
+volumes:
+  bot_data:
+
+services:
+  bot:
+    image: qwertttyyy/email-bot
+    env_file: .env
+    volumes:
+      - bot_data:/app/src/data

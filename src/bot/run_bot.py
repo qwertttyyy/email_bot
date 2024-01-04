@@ -19,11 +19,13 @@ def start_bot():
 
     job = updater.job_queue
 
-    job.run_repeating(
-        send_emails_data,
-        interval=timedelta(seconds=100),
-        first=1,
-    )
+    # job.run_repeating(
+    #     send_emails_data,
+    #     interval=timedelta(seconds=100),
+    #     first=1,
+    # )
+
+    print('Bot started !!!')
 
     updater.start_polling()
     updater.idle()
