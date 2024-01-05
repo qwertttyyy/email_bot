@@ -5,6 +5,7 @@ volumes:
 
 services:
   bot:
+    restart: always
     image: qwertttyyy/email-bot
     env_file: .env
     volumes:

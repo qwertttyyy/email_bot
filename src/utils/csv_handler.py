@@ -19,10 +19,30 @@ class CSVHandler:
             csv_writer = csv.writer(file, delimiter=';', lineterminator='\r')
             csv_writer.writerow(data)
 
-    def read_row(self, row_name: str):
+    def read_column(self, column_name: str):
         values = []
         with open(self.path, encoding='utf-8') as file:
             csv_reader = csv.DictReader(file, delimiter=';')
             for row in csv_reader:
-                values.append(row[row_name])
+                values.append(row[column_name])
         return values
+
+    def remove_row_by_column_value(
+        self, column_name: str, value_to_remove: str
+    ):
+        with open(self.path, 'r', encoding='utf-8') as file:
+            csv_reader = csv.DictReader(file, delimiter=';')
+            header = csv_reader.fieldnames
+            updated_rows = [
+                row
+                for row in csv_reader
+                if str(row[column_name]) != value_to_remove
+            ]
+
+        with open(self.path, 'w', encoding='utf-8') as file:
+            if header:
+                csv_writer = csv.DictWriter(
+                    file, fieldnames=header, delimiter=';', lineterminator='\r'
+                )
+                csv_writer.writeheader()
+                csv_writer.writerows(updated_rows)

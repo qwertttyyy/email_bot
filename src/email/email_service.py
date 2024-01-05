@@ -27,7 +27,7 @@ class EmailClient:
     _PASSWORD = os.getenv('PASSWORD')
 
     @staticmethod
-    def _decode_mime_header(header_str):
+    def _decode_mime_header(header_str: str):
         decoded_header = decode_header(header_str)[0]
         header_bytes, charset = decoded_header
         if charset:
@@ -38,13 +38,13 @@ class EmailClient:
         return header_bytes
 
     @staticmethod
-    def _convert_date(date_str):
+    def _convert_date(date_str: str):
         if date_str:
             parsed_date = parsedate_to_datetime(date_str)
             return parsed_date.strftime(DATE_FORMAT)
         return date_str
 
-    def _parse_email(self, email_data, bytes_uid):
+    def _parse_email(self, email_data: list, bytes_uid: bytes) -> Email:
         uid = bytes_uid.decode('utf-8')
         email_message = email.message_from_bytes(email_data[0][1])
         subject = self._decode_mime_header(email_message.get('Subject'))
