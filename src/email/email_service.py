@@ -44,7 +44,7 @@ class EmailClient:
             return parsed_date.strftime(DATE_FORMAT)
         return date_str
 
-    def parse_email(self, email_data, bytes_uid):
+    def _parse_email(self, email_data, bytes_uid):
         uid = bytes_uid.decode('utf-8')
         email_message = email.message_from_bytes(email_data[0][1])
         subject = self._decode_mime_header(email_message.get('Subject'))
@@ -70,7 +70,7 @@ class EmailClient:
                 for uid in uids[0].split():
                     result, email_data = mail.uid('fetch', uid, '(RFC822)')
                     if result == 'OK' and email_data and email_data[0]:
-                        parsed_email_data = self.parse_email(email_data, uid)
+                        parsed_email_data = self._parse_email(email_data, uid)
                         emails.append(parsed_email_data)
 
             return emails

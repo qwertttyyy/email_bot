@@ -7,6 +7,10 @@ from telegram.ext import Updater, CommandHandler
 
 from src.bot.commands import start
 from src.bot.repeatings import send_emails_data
+from src.config import (
+    FIRST_REQUEST_DELAY_SECONDS,
+    EMAIL_CHECK_INTERVAL,
+)
 
 load_dotenv()
 
@@ -14,18 +18,17 @@ load_dotenv()
 def start_bot():
     bot = Bot(os.getenv('BOT_API_TOKEN'))
     updater = Updater(bot=bot, use_context=True)
-
-    updater.dispatcher.add_handler(CommandHandler('start', start))
+    dp = updater.dispatcher
 
     job = updater.job_queue
 
     job.run_repeating(
         send_emails_data,
-        interval=timedelta(seconds=100),
-        first=1,
+        interval=timedelta(seconds=int(EMAIL_CHECK_INTERVAL)),
+        first=int(FIRST_REQUEST_DELAY_SECONDS),
     )
 
-    print('Bot started !!!')
+    dp.add_handler(CommandHandler('start', start))
 
     updater.start_polling()
     updater.idle()

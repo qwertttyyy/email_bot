@@ -6,7 +6,7 @@ volumes:
 services:
   bot:
     build: ./src
-    image: email-bot
+    image: qwertttyyy/email-bot
     env_file: .env
     volumes:
       - bot_data:/app/src/data

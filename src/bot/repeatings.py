@@ -28,7 +28,6 @@ def send_emails_data(context):
     except Exception:
         logger.exception('Ошибка получения писем')
         raise Exception()
-
     google_sheets = GoogleSheets()
     uids = csv_handler.read_row('UID')
     for email in emails:
@@ -54,3 +53,4 @@ def send_emails_data(context):
                 logger.exception(f'Ошибка отправки в телеграм {email}')
                 raise Exception()
             csv_handler.update_rows([email.uid, email.date, email.address])
+            logger.info(f'Отправлено письмо {email}')
