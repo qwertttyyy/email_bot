@@ -10,12 +10,6 @@ load_dotenv()
 class GoogleSheets:
     _SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     _SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
-    _SHEET_NAME = os.getenv('SHEET_NAME')
-    _PERMISSIONS_BODY = {
-        'type': 'user',
-        'role': 'writer',
-        'emailAddress': os.getenv('ADMIN_EMAIL'),
-    }
     _INFO = {
         'type': os.getenv('TYPE'),
         'project_id': os.getenv('PROJECT_ID'),
