@@ -32,7 +32,7 @@ class EmailClient:
         header_bytes, charset = decoded_header
         if charset:
             try:
-                return header_bytes.decode()
+                return header_bytes.decode(charset)
             except:
                 return header_bytes.decode('cp1252')
         return header_bytes
