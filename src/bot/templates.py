@@ -5,3 +5,4 @@ EMAIL_DATA_MESSAGE = (
     '<b>Дата:</b> {date}\n'
     '<b>Тема:</b> {subject}'
 )
+START_MESSAGE = 'Теперь бот будет отправлять сообщения в этот чат!'

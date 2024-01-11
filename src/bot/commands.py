@@ -1,3 +1,4 @@
+from src.bot.templates import START_MESSAGE
 from src.config import DATA_PATH, USERS_DATA_FILENAME, CHAT_ID_COLUMN_NAME
 from src.utils.csv_handler import CSVHandler
 
@@ -14,6 +15,4 @@ def start(update, context):
     if str(chat_id) not in existing_chat_ids:
         csv_handler.update_rows([chat_id])
 
-    context.bot.send_message(
-        chat_id=chat_id, text='Бот запущен и готов к работе!'
-    )
+    context.bot.send_message(chat_id=chat_id, text=START_MESSAGE)
