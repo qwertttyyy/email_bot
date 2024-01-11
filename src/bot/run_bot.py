@@ -7,6 +7,7 @@ from telegram.ext import Updater, CommandHandler
 
 from src.bot.commands import start
 from src.bot.repeatings import send_emails_data
+from src.bot.templates import START_COMMAND
 from src.config import (
     FIRST_REQUEST_DELAY_SECONDS,
     EMAIL_CHECK_INTERVAL,
@@ -28,7 +29,7 @@ def start_bot():
         first=int(FIRST_REQUEST_DELAY_SECONDS),
     )
 
-    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler(START_COMMAND, start))
 
     updater.start_polling()
     updater.idle()
