@@ -7,7 +7,14 @@ from email.utils import parseaddr, parsedate_to_datetime
 
 from dotenv import load_dotenv
 
-from src.config import DATE_FORMAT
+from src.config import (
+    DATE_FORMAT,
+    DATA_PATH,
+    SENT_EMAILS_UID_FILENAME,
+    UID_COLUMN_NAME,
+)
+from src.utils.csv_handler import CSVHandler
+from src.utils.logging_config import logger
 
 load_dotenv()
 
@@ -28,6 +35,8 @@ class EmailClient:
 
     @staticmethod
     def _decode_mime_header(header_str: str):
+        if header_str is None:
+            return ''
         decoded_header = decode_header(header_str)[0]
         header_bytes, charset = decoded_header
         if charset:
@@ -57,6 +66,8 @@ class EmailClient:
         )
 
     def fetch_emails(self, date: str) -> list[Email]:
+        csv_handler = CSVHandler(DATA_PATH / SENT_EMAILS_UID_FILENAME)
+
         emails = []
         with imaplib.IMAP4_SSL(self._HOST) as mail:
             mail.login(self._LOGIN, self._PASSWORD)
@@ -66,11 +77,26 @@ class EmailClient:
                 None,
                 f'SINCE {date}',
             )
-            if result == 'OK':
-                for uid in uids[0].split():
-                    result, email_data = mail.uid('fetch', uid, '(RFC822)')
+            sent_uids = csv_handler.read_column(UID_COLUMN_NAME)
+            if result != 'OK':
+                raise Exception('Ошибка получения писем. Result is not OK')
+            for uid in uids[0].split():
+                if uid.decode('utf-8') not in sent_uids:
+                    try:
+                        result, email_data = mail.uid('fetch', uid, '(RFC822)')
+                    except:
+                        logger.exception(f'Ошибка получение письма {uid}')
+                        continue
                     if result == 'OK' and email_data and email_data[0]:
-                        parsed_email_data = self._parse_email(email_data, uid)
+                        try:
+                            parsed_email_data = self._parse_email(
+                                email_data, uid
+                            )
+                        except:
+                            logger.exception(
+                                f'Ошибка парсинга письма {email_data[0]}'
+                            )
+                            continue
                         emails.append(parsed_email_data)
 
             return emails
