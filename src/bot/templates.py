@@ -1,4 +1,4 @@
-START_COMMAND = 'starttpb'
+START_COMMAND = 'start_tpb'
 
 EMAIL_DATA_MESSAGE = (
     'Получено новое письмо:\n\n'
