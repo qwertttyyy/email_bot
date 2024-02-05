@@ -97,6 +97,9 @@ class EmailClient:
                                 f'Ошибка парсинга письма {email_data[0]}'
                             )
                             continue
+                        logger.info(
+                            f'Получено письмо imap {parsed_email_data}'
+                        )
                         emails.append(parsed_email_data)
 
             return emails

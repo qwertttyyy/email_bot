@@ -31,7 +31,7 @@ def send_emails_data(context):
     try:
         emails = email_client.fetch_emails(yesterday_date)
     except Exception as error:
-        logger.exception('Ошибка получения писем')
+        logger.exception('Ошибка получения писем', exc_info=False)
         raise error
     google_sheets = GoogleSheets()
     for email in emails:
@@ -45,13 +45,16 @@ def send_emails_data(context):
             google_sheets.update_values(data_to_sheets, f'{SHEET_NAME}!A:D')
         except Exception as error:
             logger.exception(
-                f'Ошибка отправки в Google Sheets {data_to_sheets}'
+                f'Ошибка отправки в Google Sheets {data_to_sheets}',
+                exc_info=False,
             )
             raise error
         try:
             send_emails_data_message(context, email)
         except Exception as error:
-            logger.exception(f'Ошибка отправки в телеграм {email}')
+            logger.exception(
+                f'Ошибка отправки в телеграм {email}', exc_info=False
+            )
             raise error
         csv_handler.update_rows([email.uid, email.date, email.address])
-        logger.info(f'Отправлено письмо {email}')
+        logger.info(f'Отправлено письмо в гугл и тг {email}')
