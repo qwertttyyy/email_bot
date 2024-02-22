@@ -77,6 +77,7 @@ class EmailClient:
                 None,
                 f'SINCE {date}',
             )
+            logger.info('Получены uids писем')
             sent_uids = csv_handler.read_column(UID_COLUMN_NAME)
             if result != 'OK':
                 raise Exception('Ошибка получения писем. Result is not OK')
