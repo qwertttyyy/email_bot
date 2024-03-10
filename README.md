@@ -16,3 +16,5 @@ EmailBot – это Telegram бот для упрощения процесса �
 - Python Telegram Bot
 - Google API Python Client
 - Docker
+
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white(https://github.com/))
